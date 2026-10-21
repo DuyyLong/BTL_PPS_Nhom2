@@ -6,7 +6,7 @@ Bài tập lớn Phương Pháp Số - nhóm 2
 
 
 ## 1. Bảng phân công nhiệm vụ (Nhóm 7 sinh viên)
-Nhóm thực hiện điều chỉnh phân công cho 7 thành viên nhưng vẫn giữ nguyên nguyên tắc mỗi sinh viên sở hữu ít nhất một phần mã nguồn trong lịch sử commit[cite: 1]:
+
 
 | Vai trò | Họ và Tên | MSSV | Tài khoản GitHub | Nhiệm vụ & File phụ trách |
 | :--- | :--- | :--- | :--- | :--- |

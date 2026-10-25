@@ -1,6 +1,6 @@
 
 def check_contraction(g, dg, a, b, n_sample=1000):
-  """Kiểm tra điều kiện co cho phương pháp Lặp đơn."""
+  """Kiểm tra điều kiện cho phương pháp Lặp đơn."""
   step_size = (b - a) / n_sample
   max_q = 0.0
   for i in range(n_sample + 1):

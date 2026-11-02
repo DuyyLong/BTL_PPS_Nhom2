@@ -38,12 +38,12 @@ Tên thuật toán trong bài giảng: Algorithm 5 Phương pháp Newton (Chươ
      err = float("int")
     # dong 1 - Algorithm 5: for i = 1 → n_max do 
     for i in range(1, n_max + 1):
-        Df_val = float(df(x_curr))
+        Df_val = float(Df(x_curr))
         if math. isnan(Df_val) or math.isinf(Df_val):
             raise ValueError(
                 f"Giá trị đạo hàm Df tại bước i = {i} (x = {x_curr}) không xác định (NaN/Inf).")
         # Kiểm tra điều kiện biên đạo hàm bằng 0 theo yêu cầu P3 & R6 
-        if df_val == 0.0:
+        if Df_val == 0.0:
             raise ValueError(
                 f"Lỗi chia cho 0: Đạo hàm Df(x) tại x = {x_curr} (bước i = {i}) bằng 0. Không thể tiếp tục phương pháp Newton.")
         f_val = float (f(x_curr))

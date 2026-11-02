@@ -41,43 +41,35 @@ class ConvergenceError:
         Df_val = float(df(x_curr))
         if math. isnan(Df_val) or math.isinf(Df_val):
             raise ValueError(
-                f"Giá trị đạo hàm Df tại bước i = {i} (x = {x_curr}) không xác định (Nan/Inf).")
+                f"Giá trị đạo hàm Df tại bước i = {i} (x = {x_curr}) không xác định (NaN/Inf).")
         # Kiểm tra điều kiện biên đạo hàm bằng 0 theo yêu cầu P3 & R6 
         if df_val == 0.0:
             raise ValueError(
                 f"Lỗi chia cho 0: Đạo hàm Df(x) tại x = {x_curr} (bước i = {i}) bằng 0. Không thể tiếp tục phương pháp Newton.")
-
         f_val = float (f(x_curr))
         if math.isnan(f_val) or math.isinf(f_val):
             raise ValueError(
-                f"Giá trị hàm f(x) tại bước i = {i} (x = {x_curr}) không xác định (Nan/Inf).")
-             
-     # dong 2 - Thuat toan: Tinh gia tri dao ham tai diem x_k de kiem tra dieu kien bien chia cho 0      
-        Df_val = Df(x_k)
-          if math.isnan(Df_val) or math.isinf(Df_val):
-               raise ValueError(f"Giá trị đạo hàm Df tại x_{k-1} = {x_k} không xác định (NaN/Inf).")
-          if Df_val == 0.0:  
-               raise ValueError(f"Lỗi: Đạo hàm tại x_{k-1} = {x_k} bằng 0. Không thể tiếp tục phương pháp Newton.")
-          f_val = f(x_k)
-          if math.isnan(f_val) or math.isinf(f_val):
-               raise ValueError(f"Giá trị hàm số f tại x_{k-1} = {x_k} không xác định (NaN/Inf).")
-    # dong 2 (tiep) - Thuat toan: Cap nhat x_new (x_next) theo cong thuc Newton
-          x_next = x_k - f_val / Df_val
-         if math.isnan(x_next) or math.isinf(x_next):
-            raise ValueError(f"Giá trị tính toán xấp xỉ tại bước k = {k} không xác định (NaN/Inf).")
-     # dong 3 - Thuat toan: Tinh sai so err giua hai buoc lap lien tiep
-          err = abs(x_next - x_k)
-        
-     # dong 4, 5 - Thuat toan: Kiem tra dieu kien dung (err < eps)
-         if err < eps or abs(f(x_next)) < eps:
-     # dong 10 - Thuat toan: Return ket qua (k, err, x_new)
-            return x_next, k, err
-            
-     # dong 7 - Thuat toan: Gan x = x_new cho buoc lap tiep theo
-        x_k = x_next
-        
-     # dong 10 (truong hop vuot qua n_max ma chua dat sai so)
-      raise ConvergenceError(
-        f"Phương pháp Newton không hội tụ sau n_max = {n_max} bước lặp "
-        f"(sai số cuối cùng err = {err:.6e} > eps = {eps:.6e})."
-    )      
+                f"Giá trị hàm f(x) tại bước i = {i} (x = {x_curr}) không xác định (NaN/Inf).")
+        #dong 2 - Algorithm 5: Cap nhat x_new <- x_0 - f (x_0) / Df (x_0)
+        x_new = x_curr - f_val / Df_val
+        if math. isnan (x_new) or math.isinf(x_new):
+            raise ValueError(
+               f"Nghiệm gần đúng x_new tại bước i = {i} không xác định (NaN/Inf)."
+            )
+        # dong 3 - Algorithm 5 (ket hop Nhan xet thuc hanh): Tinh sai so giua 2 buoc
+        err = abs (x_new - x_curr)
+        # dong 4 - Algorithm 5: if err ‹ eps then 
+        if err ‹ eps:
+            # dong 5 & dong 10 - Algorithm 5: Thuat toan dung va tra ve (x_new, i, err)
+            return float(x_new), i, float(err)
+        # dong 6 - Algorithm 5: else
+        else:
+            # dong 7 - Algorithm 5: x <- x_new
+            x_curr = x_new
+        # dong 8 - Algorithm 5: end if
+    # dong 9 - Algorithm 5: end for
+    # Báo lỗi rõ ràng khi hết số bước lặp tối đa n_max mà chưa đạt sai số eps (R6)
+    raise ConvergenceError(
+    f"Algorithm 5 (Newton) không hội tụ sau n_max = {n_max} bước lặp "
+    f" (sai số cuối err = {err: .6e} >= eps = {eps: .6e}) ."
+    )

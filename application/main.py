@@ -9,19 +9,6 @@ Nội dung:
     4. Tính chiều dài dây S = 2a * sinh(L / (2a)) và khảo sát S khi d thay đổi từ 5 đến 20 m.
 
 Dữ liệu đề bài: nhịp L = 100 m, độ võng d = 10 m  =>  a ≈ 126,63 m, S ≈ 102,62 m.
-
-Cách chạy:
-    pytest                    -> chạy toàn bộ kiểm thử (PHẦN 3)
-    python test_catenary.py   -> in kết quả + vẽ đồ thị khảo sát S theo d (PHẦN 4)
-
-Cấu trúc file:
-    PHẦN 1: các hàm của bài toán (f, f', g, g', S)
-    PHẦN 2: thuật toán (Newton, Lặp đơn, check_contraction)
-    PHẦN 3: kiểm thử pytest
-    PHẦN 4: thực nghiệm khảo sát S theo d
-
-Lưu ý: số hiệu "Thuat toan N" / "dong k" trong chú thích là số tạm,
-       cần đổi cho khớp với pseudocode trong bài giảng.
 """
 import math
 import numpy as np

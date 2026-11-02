@@ -1,4 +1,3 @@
-"""Phan P1 - Phuong phap lap don (Muc 3.3, Dinh ly 3.2, cong thuc (3.6)-(3.7))."""
 import math
 import numbers
 class ConvergenceError(RuntimeError, ValueError):

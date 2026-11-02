@@ -1,11 +1,12 @@
 from typing import Callable, Tuple
 import math
-class ConvergenceError:
-    def newton(
-        f: Callable[[float], float],
-        Df: Callable[[float], float],
-        x0: float,
-        eps: float,
+class ConvergenceError(RuntimeError, ValueError):
+    
+def newton(
+    f: Callable[[float], float],
+    Df: Callable[[float], float],
+    x0: float,
+    eps: float,
         n_max: int
     )-> tuple[float, int, float]:
         """

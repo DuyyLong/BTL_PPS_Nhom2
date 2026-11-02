@@ -1,86 +1,157 @@
+
+"""
+Thực nghiệm so sánh phương pháp Lặp đơn và phương pháp Newton (Chương 3).
+Phụ trách: Đỗ Minh Chiến (SV5)
+"""
+
 import numpy as np
 import matplotlib.pyplot as plt
+from src.lap_don import fixed_point
+from src.newton import newton
+from src.extra import check_contraction
 
-def mock_lap_don(x0, eps, max_iter=50):
-    # Giải x^2 - 2 = 0 bằng lặp đơn: x = x - 0.2*(x^2 - 2)
-    x_hist = [x0]
-    for _ in range(max_iter):
-        x_new = x_hist[-1] - 0.2 * (x_hist[-1]**2 - 2)
-        x_hist.append(x_new)
-        if abs(x_new - x_hist[-2]) < eps:
-            break
-    return np.array(x_hist)
-
-def mock_newton(x0, eps, max_iter=50):
-    # Giải f(x) = x^2 - 2 = 0, đạo hàm f'(x) = 2x
-    x_hist = [x0]
-    for _ in range(max_iter):
-        fx = x_hist[-1]**2 - 2
-        dfx = 2 * x_hist[-1]
-        x_new = x_hist[-1] - fx / dfx
-        x_hist.append(x_new)
-        if abs(x_new - x_hist[-2]) < eps:
-            break
-    return np.array(x_hist)
-
-def mock_newton_nghiem_boi(x0, eps, max_iter=50):
-    # Giải f(x) = (x-1)^2 * (x+2) = 0. Nghiệm bội x* = 1.
-    # f'(x) = (x-1)*(3x+3)
-    x_hist = [x0]
-    for _ in range(max_iter):
-        x = x_hist[-1]
-        fx = (x - 1)**2 * (x + 2)
-        dfx = (x - 1) * (3 * x + 3)
-        x_new = x - fx / dfx
-        x_hist.append(x_new)
-        if abs(x_new - x_hist[-2]) < eps:
-            break
-    return np.array(x_hist)
-
-
-# 2. Thực nghiệm & Đồ thị
 
 def analyze_convergence(x_history, x_star):
-    """Tính mảng sai số e_k và các tỉ số đánh giá bậc hội tụ"""
+    """Tính mảng sai số e_k và các tỉ số đánh giá bậc hội tụ."""
     errors = np.abs(x_history - x_star)
-    
-    # Bỏ qua cảnh báo chia cho 0 ở bước cuối
+
     with np.errstate(divide='ignore', invalid='ignore'):
-        ratio_linear = errors[1:] / errors[:-1]           # |e_{k+1}| / |e_k|
-        ratio_quadratic = errors[1:] / (errors[:-1]**2)   # |e_{k+1}| / |e_k|^2
-        
+        ratio_linear = errors[1:] / errors[:-1]
+        ratio_quadratic = errors[1:] / (errors[:-1]**2)
+
     return errors, ratio_linear, ratio_quadratic
 
-# THỰC NGHIỆM 1: So sánh tốc độ hội tụ (Nghiệm đơn)
-x_star_1 = np.sqrt(2)
-hist_ld = mock_lap_don(x0=2.0, eps=1e-6)
-hist_nw = mock_newton(x0=2.0, eps=1e-6)
 
-err_ld, _, _ = analyze_convergence(hist_ld, x_star_1)
-err_nw, _, _ = analyze_convergence(hist_nw, x_star_1)
+def main():
 
-plt.figure(figsize=(8, 5))
-plt.plot(err_ld, label='Lặp đơn', marker='o', linestyle='--')
-plt.plot(err_nw, label='Newton', marker='s', linewidth=2)
-plt.yscale('log') # Quan trọng: Yêu cầu của đề bài vẽ trên thang log
-plt.xlabel('Số bước lặp k')
-plt.ylabel('Sai số tuyệt đối $|x_k - x^*|$')
-plt.title('Thực nghiệm 1: So sánh Lặp đơn và Newton (Thang Log)')
-plt.legend()
-plt.grid(True, which="both", ls="-", alpha=0.5)
-plt.show()
+    print("--- [THỰC NGHIỆM 1] SO SÁNH SỐ BƯỚC LẶP VÀ ĐỒ THỊ SAI SỐ (THANG LOG) ---")
 
-# THỰC NGHIỆM 2: Newton với nghiệm bội 
-# Cần chứng minh khi gặp nghiệm bội, Newton bị suy biến về hội tụ bậc 1
-x_star_boi = 1.0
-hist_nw_boi = mock_newton_nghiem_boi(x0=1.5, eps=1e-6)
-err_nw_boi, ratio_1, ratio_2 = analyze_convergence(hist_nw_boi, x_star_boi)
+    # Bài toán chuẩn theo đề bài Nhóm 2: f(x) = 5x^3 - 20x + 3 = 0 trên [0, 1]
+    f = lambda x: 5.0 * (x ** 3) - 20.0 * x + 3.0
+    df = lambda x: 15.0 * (x ** 2) - 20.0
+    g = lambda x: (5.0 * (x ** 3) + 3.0) / 20.0
+    dg = lambda x: (15.0 * (x ** 2)) / 20.0
 
-print("--- THỰC NGHIỆM 2: TỈ SỐ HỘI TỤ NEWTON VỚI NGHIỆM BỘI ---")
-print("Nhận xét: Tỉ số bậc 1 tiến về 0.5 (hằng số), trong khi tỉ số bậc 2 tăng vọt. Thuật toán bị suy biến xuống hội tụ tuyến tính.\n")
-print(f"{'Bước k':<10} | {'|e_{k+1}| / |e_k|':<20} | {'|e_{k+1}| / |e_k|^2':<20}")
-print("-" * 55)
-for k in range(len(ratio_1)-1):
-    r1 = f"{ratio_1[k]:.4f}"
-    r2 = f"{ratio_2[k]:.4f}" if ratio_2[k] < 1000 else "Rất lớn (Vô cực)"
-    print(f"Bước {k:<4} | {r1:<20} | {r2:<20}")
+    x_star = 0.150858  # Nghiệm mẫu chính xác từ đề bài
+    x0 = 0.5
+    eps = 1e-12
+
+    _, q = check_contraction(g, dg, a=0.0, b=1.0)
+
+    # Chạy lưu vết qua từng bước lặp bằng các hàm chuẩn của nhóm (SV1 & SV2)
+
+    # Lặp đơn
+    hist_ld = [x0]
+    x_cur = x0
+    factor = q / (1.0 - q) if q > 0 else 1.0
+
+    for _ in range(100):
+        x_nxt = g(x_cur)
+        hist_ld.append(x_nxt)
+
+        if factor * abs(x_nxt - x_cur) <= eps:
+            break
+
+        x_cur = x_nxt
+
+    hist_ld = np.array(hist_ld)
+
+    # Newton
+    hist_nw = [x0]
+    x_cur = x0
+
+    for _ in range(100):
+        df_val = df(x_cur)
+
+        if df_val == 0:
+            break
+
+        x_nxt = x_cur - f(x_cur) / df_val
+        hist_nw.append(x_nxt)
+
+        if abs(x_nxt - x_cur) < eps:
+            break
+
+        x_cur = x_nxt
+
+    hist_nw = np.array(hist_nw)
+
+    err_ld, _, _ = analyze_convergence(hist_ld, x_star)
+    err_nw, _, _ = analyze_convergence(hist_nw, x_star)
+
+    # Vẽ đồ thị
+    plt.figure(figsize=(8, 5))
+    plt.plot(
+        range(len(err_ld)), err_ld,
+        label='Lặp đơn (Bậc 1)',
+        marker='o',
+        linestyle='--',
+        linewidth=2
+    )
+    plt.plot(
+        range(len(err_nw)), err_nw,
+        label='Newton (Bậc 2)',
+        marker='s',
+        linewidth=2
+    )
+
+    plt.yscale('log')  # Thang log theo yêu cầu đề bài
+    plt.xlabel('Số bước lặp k')
+    plt.ylabel('Sai số tuyệt đối |x_k - x*| (Thang Log)')
+    plt.title('Thực nghiệm 1: So sánh tốc độ hội tụ Lặp đơn và Newton')
+    plt.grid(True, which="both", ls="--", alpha=0.5)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig("experiments_convergence.png", dpi=150)
+    plt.close()
+
+    print("-> Đã vẽ và lưu đồ thị thành công vào file: experiments_convergence.png")
+
+    print("\n--- [THỰC NGHIỆM 2] KHẢO SÁT NEWTON VỚI NGHIỆM BỘI f(x) = (x - 1)^2 * (x + 2) ---")
+
+    f_boi = lambda x: ((x - 1.0) ** 2) * (x + 2.0)
+    df_boi = lambda x: 3.0 * ((x ** 2) - 1.0)
+    x_star_boi = 1.0
+
+    hist_boi = [1.5]
+    x_cur = 1.5
+
+    for _ in range(20):
+        df_v = df_boi(x_cur)
+
+        if df_v == 0:
+            break
+
+        x_nxt = x_cur - f_boi(x_cur) / df_v
+        hist_boi.append(x_nxt)
+
+        if abs(x_nxt - x_cur) < 1e-10:
+            break
+
+        x_cur = x_nxt
+
+    hist_boi = np.array(hist_boi)
+
+    err_boi, ratio_lin, ratio_quad = analyze_convergence(
+        hist_boi, x_star_boi
+    )
+
+    print(
+        f"{'Bước k':<10} | "
+        f"{'|e_{k+1}| / |e_k| (Bậc 1 -> 0.5)':<32} | "
+        f"{'|e_{k+1}| / |e_k|^2 (Bậc 2)':<32}"
+    )
+    print("-" * 80)
+
+    for k in range(len(ratio_lin)):
+        r1 = f"{ratio_lin[k]:.4f}"
+        r2 = (
+            f"{ratio_quad[k]:.4f}"
+            if ratio_quad[k] < 1000
+            else "Rất lớn (Vô cực)"
+        )
+
+        print(f"{k:<10} | {r1:<32} | {r2}")
+
+if __name__ == "__main__":
+    main()

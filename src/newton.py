@@ -10,7 +10,7 @@ def newton(
         n_max: int
     )-> tuple[float, int, float]:
     Giải gần đúng phương trình phi tuyến f(x) = 0 bằng phương pháp Newton.
-Tên thuật toán trong bài giảng: Algorithm 5 Phương pháp Newton (Chương 3, trang 48).
+    Tên thuật toán trong bài giảng: Algorithm 5 Phương pháp Newton (Chương 3, trang 48).
         Require:
             -f: hàm số f(x) cần tìm nghiệm (Callable)
             -Df: đạo hàm f`(x) của hàm số (Callable)

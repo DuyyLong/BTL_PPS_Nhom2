@@ -35,7 +35,7 @@ def newton(
         if not isinstance(n_max, int) or isinstance(n_max, bool) or n_max < 1:
             raise ValueError(f"Số bước lặp tối đa 'n_max' phải là số nguyên dương >= 1, nhận được n_max = {n_max}.")
      x_curr = float(x0)
-     err = float("int")
+     err = float("inf")
     # dong 1 - Algorithm 5: for i = 1 → n_max do 
     for i in range(1, n_max + 1):
         Df_val = float(Df(x_curr))

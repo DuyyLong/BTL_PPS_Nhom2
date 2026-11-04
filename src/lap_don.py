@@ -3,7 +3,7 @@ import numbers
 class ConvergenceError(RuntimeError, ValueError):
     """Loi khi phuong phap lap don chua dat do chinh xac eps sau n_max buoc."""
 def fixed_point(g, x0, q, eps, n_max) -> tuple[float, int, float]:
-    """Giai gan dung phuong trinh x = g(x) bang phuong phap lap don.
+    """Giai gan dung phuong trinh x = g(x) bang phuong phap lap don."""
     Ten thuat toan: Thuat toan lap don (Muc 3.3), dung theo danh gia sai so
     qua he so co q - cong thuc (3.7): |x_k - x*| <= q/(1-q) * |x_k - x_{k-1}|.
     Require:

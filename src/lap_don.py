@@ -1,11 +1,15 @@
 import math
 import numbers
+
 class ConvergenceError(RuntimeError, ValueError):
     """Loi khi phuong phap lap don chua dat do chinh xac eps sau n_max buoc."""
+
 def fixed_point(g, x0, q, eps, n_max) -> tuple[float, int, float]:
-    """Giai gan dung phuong trinh x = g(x) bang phuong phap lap don."""
+    """Giai gan dung phuong trinh x = g(x) bang phuong phap lap don.
+
     Ten thuat toan: Thuat toan lap don (Muc 3.3), dung theo danh gia sai so
     qua he so co q - cong thuc (3.7): |x_k - x*| <= q/(1-q) * |x_k - x_{k-1}|.
+
     Require:
         g     : ham lap thoa Dinh ly 3.2 tren [a, b] (|g'(x)| <= q < 1,
                 g([a, b]) chua trong [a, b]).
@@ -13,13 +17,16 @@ def fixed_point(g, x0, q, eps, n_max) -> tuple[float, int, float]:
         q     : he so co, 0 < q < 1.
         eps   : do chinh xac yeu cau, eps > 0.
         n_max : so buoc lap toi da, so nguyen >= 1.
+
     Ensure:
         (x, k, err): x la nghiem gan dung x_k, k la so buoc da lap,
         err = q/(1-q) * |x_k - x_{k-1}| <= eps.
+
     Raises:
         TypeError: g khong phai ham.
         ValueError: vi pham dieu kien ap dung hoac g(x) tran so / NaN / Inf.
         ConvergenceError: het n_max buoc ma van err > eps.
+    """
     # Kiem tra dieu kien ap dung (R6)
     if not callable(g):
         raise TypeError("'g' phai la mot ham.")
@@ -31,6 +38,7 @@ def fixed_point(g, x0, q, eps, n_max) -> tuple[float, int, float]:
         raise ValueError(f"'eps' phai lon hon 0, nhan duoc eps = {eps}.")
     if isinstance(n_max, bool) or not isinstance(n_max, numbers.Integral) or n_max < 1:
         raise ValueError(f"'n_max' phai la so nguyen >= 1, nhan duoc n_max = {n_max}.")
+
     x_prev = float(x0)                          # dong 1 - Thuat toan lap don: x_{k-1} <- x0
     factor = q / (1 - q)                        # dong 2 - Thuat toan lap don: he so q/(1-q)
     for k in range(1, int(n_max) + 1):          # dong 3 - Thuat toan lap don: for k = 1..n_max
@@ -40,6 +48,7 @@ def fixed_point(g, x0, q, eps, n_max) -> tuple[float, int, float]:
             raise ValueError(f"Khong tinh duoc g(x) tai buoc k = {k} (day lap phan ky?): {exc}") from exc
         if not math.isfinite(x_curr):
             raise ValueError(f"g(x) = {x_curr} tai buoc k = {k}: day lap phan ky.")
+
         err = factor * abs(x_curr - x_prev)     # dong 5 - Thuat toan lap don: err <- q/(1-q)*|x_k - x_{k-1}|
         if err <= eps:                          # dong 6 - Thuat toan lap don: if err <= eps
             return x_curr, k, err               # dong 7 - Thuat toan lap don: return (x_k, k, err)
@@ -48,3 +57,9 @@ def fixed_point(g, x0, q, eps, n_max) -> tuple[float, int, float]:
     raise ConvergenceError(                     # dong 9 - Thuat toan lap don: bao loi het n_max buoc
         f"Lap don khong hoi tu sau n_max = {n_max} buoc (err = {err:.3e} > eps = {eps:.3e})."
     )
+
+
+if __name__ == "__main__":
+    # Chay thu Vi du 3.2 (trang 43): ket qua mong doi k = 4, x = 0.15086
+    x, k, err = fixed_point(lambda x: (5 * x**3 + 3) / 20, 0.5, 0.75, 1e-4, 100)
+    print(f"Vi du 3.2: x = {x:.6f}, k = {k}, err = {err:.3e}")

@@ -10,13 +10,13 @@
 
 | Vai trò | Họ và tên | Nhiệm vụ chính | Hàm / Nội dung phụ trách | File sở hữu (Commit) |
 | :--- | :--- | :--- | :--- | :--- |
-| **SV1** | Hoàng Đức Duy | Thuật toán Lặp đơn + Docstring + Báo cáo P1 | Hàm `fixed_point` | `src/lap_don.py` |
-| **SV2** | Phạm Thị Tuyến | Thuật toán Newton + Docstring + Báo cáo P3 | Hàm `newton` | `src/newton.py` |
-| **SV3** | Vũ Quốc Huy | Cài đặt P2 & P4 (Hàm bổ trợ) + Báo cáo P2 & P4 | Hàm `check_contraction`, `fourier_start`, `newton_error` | `src/extra.py` |
-| **SV4** | Nguyễn Thu Hiền | Bộ kiểm thử `pytest`, ca biên, kiểm thử chéo Nhóm 1 | Kiểm thử 3 bài toán bắt buộc & ca biên | `tests/test_methods.py` |
-| **SV5** | Đỗ Minh Chiến | Thực nghiệm so sánh: bảng sai số, đồ thị, nhận xét | So sánh tốc độ hội tụ, bậc 2, nghiệm bội | `experiments/compare.py` |
-| **SV6** | Nguyễn Minh Quyết | Bài toán ứng dụng: Dây cáp cầu treo | Mô hình hóa, chạy code tìm `a` và chiều dài `S` | `application/main.py` |
-| **SV7** | Lê Duy Long | Trưởng nhóm KT: Repo, chuẩn mã, tích hợp, báo cáo & slide | Quản lý chung, điều phối & tích hợp hệ thống | `README.md`, `main.py` |
+| **SV1** | Hoàng Đức Duy | Thuật toán Lặp đơn + Docstring + **Báo cáo P1** | Hàm `fixed_point` | `src/lap_don.py` |
+| **SV2** | Phạm Thị Tuyến | Thuật toán Newton + Docstring + **Báo cáo P3** | Hàm `newton` | `src/newton.py` |
+| **SV3** | Vũ Quốc Huy | Cài đặt P2 & P4 (Hàm bổ trợ) + **Báo cáo P2 & P4** | Hàm `check_contraction`, `fourier_start`, `newton_error` | `src/extra.py` |
+| **SV4** | Nguyễn Thu Hiền | Bộ kiểm thử `pytest`, ca biên, kiểm thử chéo Nhóm 1 + **Báo cáo kiểm thử** | Kiểm thử 3 bài toán bắt buộc & ca biên | `tests/test_methods.py` |
+| **SV5** | Đỗ Minh Chiến | Thực nghiệm so sánh: bảng sai số, đồ thị, nhận xét + **Báo cáo thực nghiệm** | So sánh tốc độ hội tụ, bậc 2, nghiệm bội | `experiments/compare.py` |
+| **SV6** | Nguyễn Minh Quyết | Bài toán ứng dụng: Dây cáp cầu treo + **Báo cáo ứng dụng** | Mô hình hóa, chạy code tìm `a` và chiều dài `S` | `application/main.py` |
+| **SV7** | Lê Duy Long | Trưởng nhóm KT: Repo, chuẩn mã, tích hợp, **Tổng hợp báo cáo & slide** | Quản lý chung, điều phối & tích hợp hệ thống | `README.md`, `main.py` |
 
 ---
 

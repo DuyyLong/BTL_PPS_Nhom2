@@ -64,3 +64,22 @@ def test_newton_bao_loi_khi_dao_ham_tai_x0_bang_0():
             eps=1e-8,
             n_max=100,
         )
+from src.extra import fourier_start, newton_error
+def test_fixed_point_vi_du_tu_chon():
+    """Ca tự chọn cho Lặp đơn: Giải x = 0.5 * cos(x) trên [0, 1]."""
+    g = lambda x: 0.5 * math.cos(x)
+    x, k, err = fixed_point(g=g, x0=0.5, q=0.5, eps=1e-8, n_max=100)
+    assert abs(x - 0.5 * math.cos(x)) < 1e-8
+    assert k > 0
+    assert err <= 1e-8
+def test_newton_vi_du_tu_chon_va_ham_phu():
+    """Ca tự chọn cho Newton (x^2 - 2 = 0) kết hợp kiểm tra fourier_start và newton_error."""
+    f = lambda x: x**2 - 2.0
+    df = lambda x: 2.0 * x
+    d2f = lambda x: 2.0
+    x0 = fourier_start(f, d2f, a=1.0, b=2.0)
+    assert x0 == 2.0
+    x, k, err = newton(f=f, df=df, x0=x0, eps=1e-8, n_max=100)
+    assert abs(x - math.sqrt(2.0)) < 1e-8
+    err_bound = newton_error(x_k=1.41, x_prev=1.5, m1=2.0, M2=2.0)
+    assert math.isclose(err_bound, 0.5 * (0.09**2), rel_tol=1e-9)

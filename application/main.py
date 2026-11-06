@@ -176,7 +176,7 @@ def main():
         S.append(res["S"])
         S_parabol.append(L + 8 * d * d / (3 * L))  # Xấp xỉ parabol
         if i % 5 == 0:
-            print(f"{5.1f if d==5 else d:5.1f} {res['a']:10.4f} {res['S']:10.4f} {res['S'] - L:10.4f}")
+            print(f"{d:5.1f} {res['a']:10.4f} {res['S']:10.4f} {res['S'] - L:10.4f}")
 
     # Vẽ và xuất đồ thị thực nghiệm
     fig, ax = plt.subplots(1, 2, figsize=(10, 4))

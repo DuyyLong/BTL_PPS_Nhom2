@@ -46,7 +46,7 @@ def newton(
         raise ValueError(f"Số bước lặp tối đa 'n_max' phải là số nguyên dương >= 1, nhận được n_max = {n_max}.")
 
     x_curr = float(x0)
-    err = float("inf")  # Đã sửa lỗi float("int") ở dòng 38 thành float("inf")
+    err = float("inf")  
 
     # dong 1 - Algorithm 5: for i = 1 -> n_max do
     for i in range(1, n_max + 1):

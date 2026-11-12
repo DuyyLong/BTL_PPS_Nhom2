@@ -44,7 +44,19 @@ def newton(
     # Kiểm tra số bước lặp tối đa n_max
     if not isinstance(n_max, int) or isinstance(n_max, bool) or n_max < 1:
         raise ValueError(f"Số bước lặp tối đa 'n_max' phải là số nguyên dương >= 1, nhận được n_max = {n_max}.")
+    # --- BỔ SUNG: Kiểm tra xem x0 đã thỏa mãn nghiệm/sai số ngay từ đầu chưa ---
+    try:
+        f_x0 = float(f(x0))
+    except Exception as e:
+        raise ValueError(f"Lỗi khi tính giá trị hàm f tại x0 = {x0}: {e}")
 
+    if math.isnan(f_x0) or math.isinf(f_x0):
+        raise ValueError(f"Giá trị hàm số f tại x0 = {x0} không xác định (NaN/Inf).")
+
+    # Nếu ngay tại x0 mà giá trị hàm số đã nhỏ hơn eps thì trả về luôn (số bước lặp = 0)
+    if abs(f_x0) < eps:
+        return float(x0), 0, abs(f_x0)
+    # -----------------------------------------------
     x_curr = float(x0)
     err = float("inf")  
 
